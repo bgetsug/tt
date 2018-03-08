@@ -7,5 +7,5 @@ jobs:
     steps:
       - checkout
       - run:
-          name: goreleaser
+          name: GoReleaser
           command: curl -sL https://git.io/goreleaser | bash
