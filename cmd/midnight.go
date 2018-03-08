@@ -34,16 +34,6 @@ var midnightCmd = &cobra.Command{
 	Short: "List upcoming midnights",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		//t := time.Now()
-
-		//oneHrFromNow := t.Add(time.Hour)
-
-		//fmt.Println(t.Zone())
-		//fmt.Println(oneHrFromNow.In(utcOffsetLocations[7]).Zone())
-
-
-		//fmt.Println(oneHrFromNow.After(t))
-
 		fmt.Println("\nNext midnight will occur at:")
 
 		t := time.Now().UTC()

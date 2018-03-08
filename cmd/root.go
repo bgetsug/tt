@@ -31,7 +31,8 @@ import (
 )
 
 var (
-	version, commit, date, cfgFile string
+	version string
+	cfgFile string
 )
 
 // RootCmd represents the base command when called without any subcommands

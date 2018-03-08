@@ -2,8 +2,6 @@ package cmd
 
 import (
 	"time"
-
-	"github.com/jinzhu/now"
 )
 
 var (
@@ -75,16 +73,4 @@ func (u utcOffset) NauticalName() string {
 
 func (u utcOffset) Offset() time.Duration {
 	return u.offset
-}
-
-func currentMidnights(t time.Time) []time.Time {
-	var matchingMidnights []time.Time
-
-	for _, loc := range utcOffsetLocations {
-		if midnight := now.New(t.In(loc)).BeginningOfDay(); midnight.Equal(t) {
-			matchingMidnights = append(matchingMidnights, midnight)
-		}
-	}
-
-	return matchingMidnights
 }
