@@ -46,7 +46,7 @@ var (
 var convCmd = &cobra.Command{
 	Use:   "conv [time | year] [month] [day] [hour] [minute] [second] [nanosecond]",
 	Short: "Convert a time",
-	Run: conv,
+	Run:   conv,
 }
 
 func init() {
@@ -54,7 +54,7 @@ func init() {
 
 	flags := convCmd.PersistentFlags()
 
-	flags.StringVarP(&format, "format", "f", time.RFC3339, "The format (layout) of the input time")
+	flags.StringVarP(&format, "format", "f", "2006-01-02 15:04:05 -0700 MST", "The format (layout) of the input time")
 	flags.StringVarP(&timezone, "timezone", "z", time.Local.String(), "")
 }
 
