@@ -53,9 +53,7 @@ var convCmd = &cobra.Command{
 
 		in := parseTimeFromArgs(args)
 
-		fmt.Println(in.Format(format))
-		fmt.Print("\n       occurs at\n\n")
-		fmt.Println(in.In(loc).Format(format))
+		fmt.Println(in.Format(format), "occurs at", in.In(loc).Format(format))
 	},
 }
 

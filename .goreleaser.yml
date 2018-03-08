@@ -1,3 +1,11 @@
+brew:
+  github:
+    owner: bgetsug
+    name: homebrew-tap
+  commit_author:
+     name: goreleaserbot
+     email:
+
 builds:
   -
     env:
