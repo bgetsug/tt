@@ -22,7 +22,6 @@ package cmd
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
@@ -47,29 +46,24 @@ var (
 var convCmd = &cobra.Command{
 	Use:   "conv [time | year] [month] [day] [hour] [minute] [second] [nanosecond]",
 	Short: "Convert a time",
-	Run: func(cmd *cobra.Command, args []string) {
-
-		loc := location()
-
-		in := parseTimeFromArgs(args)
-
-		fmt.Println(in.Format(format), "occurs at", in.In(loc).Format(format))
-	},
+	Run: conv,
 }
 
 func init() {
 	RootCmd.AddCommand(convCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// convCmd.PersistentFlags().String("foo", "", "A help for foo")
-
 	flags := convCmd.PersistentFlags()
 
 	flags.StringVarP(&format, "format", "f", time.RFC3339, "The format (layout) of the input time")
 	flags.StringVarP(&timezone, "timezone", "z", time.Local.String(), "")
+}
+
+func conv(cmd *cobra.Command, args []string) {
+	loc := location()
+
+	in := parseTimeFromArgs(args)
+
+	fmt.Println(in.Format(format), "occurs at", in.In(loc).Format(format))
 }
 
 func location() *time.Location {
@@ -92,14 +86,4 @@ func location() *time.Location {
 	}
 
 	return loc
-}
-
-func mustInt(a string) int {
-	i, err := strconv.Atoi(a)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return i
 }

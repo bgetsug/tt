@@ -23,6 +23,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/jinzhu/now"
@@ -106,4 +107,14 @@ func parseTimeFromArgs(args []string) time.Time {
 	}
 
 	return in
+}
+
+func mustInt(a string) int {
+	i, err := strconv.Atoi(a)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return i
 }
