@@ -20,8 +20,17 @@
 
 package main
 
-import "github.com/bgetsug/tt/cmd"
+import (
+	"fmt"
+
+	"github.com/bgetsug/tt/cmd"
+)
+
+var (
+	version string
+)
 
 func main() {
+	cmd.RootCmd.Short = fmt.Sprintf("Time Tool v%s", version)
 	cmd.Execute()
 }
