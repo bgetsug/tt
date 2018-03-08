@@ -22,10 +22,6 @@ package main
 
 import "github.com/bgetsug/tt/cmd"
 
-var (
-	version, commit, date string
-)
-
 func main() {
 	cmd.Execute()
 }

@@ -31,12 +31,12 @@ import (
 )
 
 var (
-	cfgFile string
+	version, commit, date, cfgFile string
 )
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Short: "Time Tool",
+	Short: fmt.Sprintf("Time Tool v%s", version),
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
