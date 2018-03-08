@@ -5,6 +5,7 @@ brew:
   commit_author:
      name: goreleaserbot
      email:
+  folder: Formula
 
 builds:
   -
