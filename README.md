@@ -5,7 +5,7 @@
 ## Features
 
 * Convert your current local time (or a specific time in your zone) to
-  another zones.
+  another zone.
 * Find upcoming midnights for each UTC offset.
 
 ## Install
