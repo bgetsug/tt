@@ -29,14 +29,14 @@ import (
 )
 
 var (
-	days int
+	midnightCount int
 )
 
 // midnightCmd represents the midnight command
 var midnightCmd = &cobra.Command{
 	Use:   "midnight",
 	Short: "List upcoming midnights for each UTC offset",
-	Run: midnight,
+	Run:   midnight,
 }
 
 func init() {
@@ -44,33 +44,55 @@ func init() {
 
 	flags := midnightCmd.PersistentFlags()
 
-	flags.IntVarP(&days, "days", "d", 1, "Number of days to generate")
+	flags.IntVarP(&midnightCount, "count", "n", 1, "Number of midnights to generate")
 }
 
 func midnight(cmd *cobra.Command, args []string) {
-	var midnights []string
+	t := time.Now().UTC()
 
-	for i := 0; i < days; i++ {
-		t := time.Now().UTC()
-
-		for _, loc := range utcOffsetLocations {
-			midnight := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, loc).AddDate(0, 0, i)
-
-			if midnight.After(t) {
-				midnights = append(midnights, fmt.Sprint(
-					midnight.In(time.Local), "  |  ", midnight.Format("2006-01-02 15:04:05 -0700 (MST)"),
-				))
-			}
-		}
-	}
-
-	sort.Strings(midnights)
-
-	fmt.Print("\nNext midnight will occur at:\n\n")
+	fmt.Print("\nNext midnight(s) will occur at:\n\n")
 	fmt.Println("          Local Time           |               Zone Time               ")
 	fmt.Println("-----------------------------------------------------------------------")
 
-	for _, midnight := range midnights {
-		fmt.Println(midnight)
+	midnights := make(chan time.Time)
+	sentMidnights := 0
+
+	go midnightsAfter(t, t, midnights, &sentMidnights)
+
+	for midnight := range midnights {
+		fmt.Println(fmt.Sprint(
+			midnight.In(time.Local), "  |  ", midnight.Format("2006-01-02 15:04:05 -0700 (MST)"),
+		))
 	}
+}
+
+func midnightsAfter(initialTime, t time.Time, midnights chan time.Time, sentMidnights *int) {
+
+	var mns []time.Time
+
+	for _, loc := range utcOffsetLocations {
+		midnight := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, loc)
+
+		if midnight.After(initialTime) {
+			mns = append(mns, midnight)
+		}
+	}
+
+	sort.Slice(mns, func(i, j int) bool { return mns[i].Before(mns[j]) })
+
+	for _, midnight := range mns {
+		if *sentMidnights == midnightCount {
+			break
+		}
+
+		midnights <- midnight
+		*sentMidnights++
+	}
+
+	if *sentMidnights < midnightCount {
+		go midnightsAfter(initialTime, t.AddDate(0, 0, 1), midnights, sentMidnights)
+		return
+	}
+
+	close(midnights)
 }

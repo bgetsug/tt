@@ -40,11 +40,12 @@ var (
 	min  = tNow.Minute()
 	sec  = tNow.Second()
 	ns   = tNow.Nanosecond()
+	loc  = time.Local
 )
 
 // convCmd represents the conv command
 var convCmd = &cobra.Command{
-	Use:   "conv [time | year] [month] [day] [hour] [minute] [second] [nanosecond]",
+	Use:   "conv [time | year] [month] [day] [hour] [minute] [second] [nanosecond] [location]",
 	Short: "Convert a time",
 	Run:   conv,
 }
@@ -54,33 +55,44 @@ func init() {
 
 	flags := convCmd.PersistentFlags()
 
-	flags.StringVarP(&format, "format", "f", "2006-01-02 15:04:05 -0700 MST", "The format (layout) of the input time")
-	flags.StringVarP(&timezone, "timezone", "z", time.Local.String(), "")
+	flags.StringVarP(&format, "format", "f", "2006-01-02 15:04:05 -0700 MST", "Time format (layout)")
+	flags.StringVarP(&timezone, "timezone", "z", time.Local.String(), "The output timezone")
 }
 
 func conv(cmd *cobra.Command, args []string) {
-	loc := location()
+	loc := location(timezone)
 
 	in := parseTimeFromArgs(args)
 
 	fmt.Println(in.Format(format), "occurs at", in.In(loc).Format(format))
 }
 
-func location() *time.Location {
+func location(name string) *time.Location {
 	var err error
 
 	loc := time.Local
 
-	if len(timezone) > 0 {
-		if strings.HasPrefix(timezone, "UTC") {
+	if len(name) > 0 {
+		if strings.HasPrefix(name, "UTC") {
 			for _, offset := range utcOffsetLocations {
-				if timezone == offset.String() {
+				if name == offset.String() {
 					return offset
 				}
 			}
 		}
 
-		if loc, err = time.LoadLocation(timezone); err != nil {
+		switch name {
+		case "CDT":
+			name = "CST6CDT"
+		case "EDT":
+			name = "EST5EDT"
+		case "MDT":
+			name = "MST7MDT"
+		case "PDT":
+			name = "PST8PDT"
+		}
+
+		if loc, err = time.LoadLocation(name); err != nil {
 			panic(err)
 		}
 	}

@@ -100,10 +100,14 @@ func parseTimeFromArgs(args []string) time.Time {
 		}
 
 		if len(args) >= 7 {
-			ns = mustInt(args[7])
+			ns = mustInt(args[6])
 		}
 
-		in = time.Date(yr, mo, d, hr, min, sec, ns, time.Local)
+		if len(args) >= 8 {
+			loc = location(args[7])
+		}
+
+		in = time.Date(yr, mo, d, hr, min, sec, ns, loc)
 	}
 
 	return in
