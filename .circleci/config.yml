@@ -2,16 +2,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.10
+      - image: circleci/golang:1.14
     working_directory: /go/src/github.com/bgetsug/tt
     steps:
       - checkout
       - run:
-          name: Install Dep
-          command: curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-      - run:
           name: Download dependencies
-          command: dep ensure
+          command: go mod download
       - run:
           name: GoReleaser
           command: curl -sL https://git.io/goreleaser | bash
