@@ -1,6 +1,6 @@
 # tt 🕰
 
-**Tiny turbo time tool, totally timely.**
+**Tiny turbo time tool**
 
 ## Features
 

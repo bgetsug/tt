@@ -1,12 +1,13 @@
 project_name: tt
-brew:
-  github:
-    owner: bgetsug
-    name: homebrew-tap
-  commit_author:
-     name: goreleaserbot
-     email:
-  folder: Formula
+brews:
+  -
+    github:
+      owner: bgetsug
+      name: homebrew-tap
+    commit_author:
+       name: goreleaserbot
+       email:
+    folder: Formula
 
 builds:
   -
@@ -20,13 +21,14 @@ builds:
 
     ldflags: -s -w -X main.version={{.Version}}
 
-archive:
-  replacements:
-    darwin: macOS
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: x86_64
+archives:
+  -
+    replacements:
+      darwin: macOS
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
 
 checksum:
   name_template: 'checksums.txt'
